@@ -22,14 +22,22 @@ class Document extends Model
         'verified_by',
         'verified_at',
         'rejection_note',
+        // Kolom verifikasi tahap 1 (KPKNL)
+        'kantor_check_status',
+        'kantor_check_note',
+        'kantor_checked_by',
+        'kantor_checked_at',
+        // Kolom verifikasi tahap 2 (Kanwil)
+        'kanwil_status',
     ];
 
     protected function casts(): array
     {
         return [
-            'is_verified' => 'boolean',
-            'verified_at' => 'datetime',
-            'file_size' => 'integer',
+            'is_verified'       => 'boolean',
+            'verified_at'       => 'datetime',
+            'kantor_checked_at' => 'datetime',
+            'file_size'         => 'integer',
         ];
     }
 
@@ -48,6 +56,11 @@ class Document extends Model
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function kantorChecker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'kantor_checked_by');
     }
 
     // ── Helpers ────────────────────────────────────────────
@@ -77,12 +90,14 @@ class Document extends Model
         return $this->mime_type === 'application/pdf';
     }
 
+    // ── Verifikasi lama (dipertahankan untuk kompatibilitas) ──
+
     public function verify(User $verifier): void
     {
         $this->update([
-            'is_verified' => true,
-            'verified_by' => $verifier->id,
-            'verified_at' => now(),
+            'is_verified'    => true,
+            'verified_by'    => $verifier->id,
+            'verified_at'    => now(),
             'rejection_note' => null,
         ]);
     }
@@ -90,10 +105,45 @@ class Document extends Model
     public function reject(User $verifier, string $note): void
     {
         $this->update([
-            'is_verified' => false,
-            'verified_by' => $verifier->id,
-            'verified_at' => now(),
+            'is_verified'    => false,
+            'verified_by'    => $verifier->id,
+            'verified_at'    => now(),
             'rejection_note' => $note,
         ]);
+    }
+
+    // ── Helpers status checklist ───────────────────────────
+
+    /** Label tampilan untuk kantor_check_status */
+    public function kantorCheckLabel(): string
+    {
+        return match($this->kantor_check_status) {
+            'lengkap_sesuai'       => 'Lengkap & Sesuai',
+            'lengkap_tidak_sesuai' => 'Lengkap tapi Tidak Sesuai',
+            'tidak_lengkap'        => 'Tidak Lengkap',
+            default                => '—',
+        };
+    }
+
+    /** Badge color untuk kantor_check_status */
+    public function kantorCheckBadge(): string
+    {
+        return match($this->kantor_check_status) {
+            'lengkap_sesuai'       => 'success',
+            'lengkap_tidak_sesuai' => 'warning',
+            'tidak_lengkap'        => 'danger',
+            default                => 'secondary',
+        };
+    }
+
+    /** Label tampilan untuk kanwil_status */
+    public function kanwilStatusLabel(): string
+    {
+        return match($this->kanwil_status) {
+            'sesuai'      => 'Sesuai',
+            'tidak_sesuai'=> 'Tidak Sesuai',
+            'pending'     => 'Belum Dicek',
+            default       => '—',
+        };
     }
 }

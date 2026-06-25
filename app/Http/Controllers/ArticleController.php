@@ -22,7 +22,7 @@ class ArticleController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $articles   = $query->latest('published_at')->paginate(12)->withQueryString();
+        $articles = $query->latest('published_at')->paginate(12)->withQueryString();
         $categories = Article::published()
             ->select('category')
             ->distinct()
@@ -51,16 +51,21 @@ class ArticleController extends Controller
 
     public function create()
     {
-        return view('articles.create');
+        $categories = Article::published()
+            ->select('category')
+            ->distinct()
+            ->pluck('category');
+
+        return view('articles.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'content'      => ['required', 'string'],
-            'category'     => ['required', 'string', 'max:100'],
-            'thumbnail'    => ['nullable', 'image', 'max:2048'],
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'category' => ['required', 'string', 'max:100'],
+            'thumbnail' => ['nullable', 'image', 'max:2048'],
             'is_published' => ['boolean'],
         ]);
 
@@ -68,14 +73,14 @@ class ArticleController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('articles/thumbnails', 'public');
         }
 
-        $data['author_id']     = Auth::id();
-        $data['slug']          = Str::slug($data['title']);
-        $data['published_at']  = $data['is_published'] ? now() : null;
+        $data['author_id'] = Auth::id();
+        $data['slug'] = Str::slug($data['title']);
+        $data['published_at'] = $data['is_published'] ? now() : null;
 
         Article::create($data);
 
         return redirect()->route('articles.index')
-                         ->with('success', 'Artikel berhasil dipublikasikan.');
+            ->with('success', 'Artikel berhasil dipublikasikan.');
     }
 
     public function edit(Article $article)
@@ -86,10 +91,10 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $data = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'content'      => ['required', 'string'],
-            'category'     => ['required', 'string', 'max:100'],
-            'thumbnail'    => ['nullable', 'image', 'max:2048'],
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'category' => ['required', 'string', 'max:100'],
+            'thumbnail' => ['nullable', 'image', 'max:2048'],
             'is_published' => ['boolean'],
         ]);
 
@@ -107,7 +112,7 @@ class ArticleController extends Controller
         $article->update($data);
 
         return redirect()->route('articles.index')
-                         ->with('success', 'Artikel berhasil diperbarui.');
+            ->with('success', 'Artikel berhasil diperbarui.');
     }
 
     public function destroy(Article $article)
@@ -119,6 +124,6 @@ class ArticleController extends Controller
         $article->delete();
 
         return redirect()->route('articles.index')
-                         ->with('success', 'Artikel berhasil dihapus.');
+            ->with('success', 'Artikel berhasil dihapus.');
     }
 }

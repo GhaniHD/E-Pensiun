@@ -26,70 +26,65 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // ── Jenis Pensiun (semua role bisa lihat) ──────────────
+    // ── Jenis Pensiun ──────────────────────────────────────
     Route::get('/jenis-pensiun', [PensionTypeController::class, 'index'])
         ->name('pension-types.index');
 
     Route::middleware('role:tik,sdm_kanwil')->group(function () {
-
         Route::get('/jenis-pensiun/create', [PensionTypeController::class, 'create'])
             ->name('pension-types.create');
-
         Route::post('/jenis-pensiun', [PensionTypeController::class, 'store'])
             ->name('pension-types.store');
-
         Route::get('/jenis-pensiun/{pensionType}/edit', [PensionTypeController::class, 'edit'])
             ->name('pension-types.edit');
-
         Route::put('/jenis-pensiun/{pensionType}', [PensionTypeController::class, 'update'])
             ->name('pension-types.update');
-
         Route::delete('/jenis-pensiun/{pensionType}', [PensionTypeController::class, 'destroy'])
             ->name('pension-types.destroy');
     });
 
-    // SHOW HARUS PALING BAWAH
     Route::get('/jenis-pensiun/{pensionType}', [PensionTypeController::class, 'show'])
         ->name('pension-types.show');
 
+    Route::get('/berkas-contoh/{documentTemplate}/download', [PensionTypeController::class, 'downloadTemplate'])
+        ->name('document-templates.download');
+    Route::get('/berkas-contoh/{documentTemplate}/preview', [PensionTypeController::class, 'previewTemplate'])
+        ->name('document-templates.preview');
+
+    Route::middleware('role:tik')->group(function () {
+        Route::post('/berkas-contoh/{documentTemplate}/upload', [PensionTypeController::class, 'uploadTemplate'])
+            ->name('document-templates.upload');
+    });
+
+    // ── Pengajuan ──────────────────────────────────────────
     Route::get('/pengajuan', [ApplicationController::class, 'index'])
         ->name('applications.index');
 
-    Route::middleware('role:pensiunan,sdm_kantor')->group(function () {
-
+    Route::middleware('role:sdm_kantor')->group(function () {
         Route::get('/pengajuan/create', [ApplicationController::class, 'create'])
             ->name('applications.create');
-
         Route::post('/pengajuan', [ApplicationController::class, 'store'])
             ->name('applications.store');
-
         Route::get('/pengajuan/{application}/edit', [ApplicationController::class, 'edit'])
             ->name('applications.edit');
-
         Route::put('/pengajuan/{application}', [ApplicationController::class, 'update'])
             ->name('applications.update');
     });
 
-    Route::middleware('role:sdm_kanwil')->group(function () {
-
-        Route::post('/pengajuan/{application}/advance', [ApplicationController::class, 'advance'])
-            ->name('applications.advance');
-
-        Route::post('/pengajuan/{application}/reject', [ApplicationController::class, 'reject'])
-            ->name('applications.reject');
-    });
+    // Tanpa middleware — otorisasi di controller
+    Route::post('/pengajuan/{application}/advance', [ApplicationController::class, 'advance'])
+        ->name('applications.advance');
+    Route::post('/pengajuan/{application}/reject', [ApplicationController::class, 'reject'])
+        ->name('applications.reject');
+    Route::post('/pengajuan/{application}/cancel', [ApplicationController::class, 'cancel'])
+        ->name('applications.cancel');
+    Route::post('/pengajuan/{application}/return-upload', [ApplicationController::class, 'returnToUpload'])
+        ->name('applications.return-upload');
 
     Route::get('/pengajuan/{application}', [ApplicationController::class, 'show'])
         ->name('applications.show');
-    // Advance / reject status (SDM Kanwil)
-    Route::middleware('role:sdm_kanwil')->group(function () {
-        Route::post('/pengajuan/{application}/advance', [ApplicationController::class, 'advance'])
-            ->name('applications.advance');
-        Route::post('/pengajuan/{application}/reject', [ApplicationController::class, 'reject'])
-            ->name('applications.reject');
-    });
 
-    // ── Dokumen / Berkas ───────────────────────────────────
+    // ── Dokumen ────────────────────────────────────────────
     Route::post('/pengajuan/{application}/dokumen', [DocumentController::class, 'store'])
         ->name('documents.store');
     Route::post('/pengajuan/{application}/dokumen/single', [DocumentController::class, 'storeSingle'])
@@ -101,8 +96,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/dokumen/{document}', [DocumentController::class, 'destroy'])
         ->name('documents.destroy');
 
-    // Verifikasi/tolak dokumen (SDM Kanwil)
+    // Checklist KPKNL Pelayanan (sdm_kantor) — individual & bulk
+    Route::middleware('role:sdm_kantor')->group(function () {
+        Route::post('/dokumen/{document}/kantor-check', [DocumentController::class, 'kantorCheck'])
+            ->name('documents.kantor-check');
+        // BULK: simpan semua berkas sekaligus
+        Route::post('/pengajuan/{application}/bulk-kantor-check', [DocumentController::class, 'bulkKantorCheck'])
+            ->name('documents.bulk-kantor-check');
+    });
+
+    // Double-check DJKN Kanwil (sdm_kanwil) — individual & bulk
     Route::middleware('role:sdm_kanwil')->group(function () {
+        Route::post('/dokumen/{document}/kanwil-check', [DocumentController::class, 'kanwilCheck'])
+            ->name('documents.kanwil-check');
+        // BULK: verifikasi semua berkas sekaligus
+        Route::post('/pengajuan/{application}/bulk-kanwil-check', [DocumentController::class, 'bulkKanwilCheck'])
+            ->name('documents.bulk-kanwil-check');
+        // Method lama dipertahankan
         Route::post('/dokumen/{document}/verify', [DocumentController::class, 'verify'])
             ->name('documents.verify');
         Route::post('/dokumen/{document}/reject', [DocumentController::class, 'reject'])
@@ -111,7 +121,6 @@ Route::middleware('auth')->group(function () {
 
     // ── Artikel MPP ────────────────────────────────────────
     Route::get('/artikel', [ArticleController::class, 'index'])->name('articles.index');
-    Route::get('/artikel/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 
     Route::middleware('role:tik,sdm_kanwil')->group(function () {
         Route::get('/artikel/create', [ArticleController::class, 'create'])->name('articles.create');
@@ -120,10 +129,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/artikel/{article}', [ArticleController::class, 'update'])->name('articles.update');
         Route::delete('/artikel/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
     });
+    Route::get('/artikel/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 
-    // ── Regulasi / UU ──────────────────────────────────────
+    // ── Regulasi ───────────────────────────────────────────
     Route::get('/regulasi', [RegulationController::class, 'index'])->name('regulations.index');
-    Route::get('/regulasi/{regulation}', [RegulationController::class, 'show'])->name('regulations.show');
+    Route::get('/regulasi/{regulation}/preview', [RegulationController::class, 'preview'])->name('regulations.preview');
     Route::get('/regulasi/{regulation}/download', [RegulationController::class, 'download'])
         ->name('regulations.download');
 
@@ -134,6 +144,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/regulasi/{regulation}', [RegulationController::class, 'update'])->name('regulations.update');
         Route::delete('/regulasi/{regulation}', [RegulationController::class, 'destroy'])->name('regulations.destroy');
     });
+    Route::get('/regulasi/{regulation}', [RegulationController::class, 'show'])->name('regulations.show');
 
     // ── Manajemen User (TIK only) ──────────────────────────
     Route::middleware('role:tik')->group(function () {

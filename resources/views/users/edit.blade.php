@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah User Baru')
-@section('page-title', 'Tambah User Baru')
+@section('title', 'Edit User — ' . $user->name)
+@section('page-title', 'Edit User')
 
 @section('content')
 
@@ -13,23 +13,72 @@
                 <i class="bi bi-people-fill me-1"></i>Manajemen User
             </a>
         </li>
-        <li class="breadcrumb-item active">Tambah User Baru</li>
+        <li class="breadcrumb-item active">Edit: {{ $user->name }}</li>
     </ol>
 </nav>
 
 <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
 
+        {{-- ── INFO USER CARD ───────────────────────────── --}}
+        <div class="card mb-3" style="border-left: 4px solid var(--accent)">
+            <div class="card-body py-3 d-flex align-items-center gap-3">
+                <div class="user-avatar-lg">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+                <div>
+                    <div style="font-weight:700;font-size:1rem">{{ $user->name }}</div>
+                    <div class="d-flex gap-2 flex-wrap mt-1">
+                        @php
+                            $roleColor = match($user->role->value) {
+                                'sdm_kanwil' => '#1B4F72',
+                                'sdm_kantor' => '#1A5276',
+                                'tik'        => '#6C3483',
+                                'pensiunan'  => '#1E8449',
+                                default      => '#555',
+                            };
+                        @endphp
+                        <span class="badge rounded-pill"
+                              style="background:{{ $roleColor }};font-size:.72rem">
+                            {{ $user->role->label() }}
+                        </span>
+                        @if($user->is_active)
+                            <span class="badge bg-success-subtle text-success border border-success-subtle"
+                                  style="font-size:.72rem">
+                                <i class="bi bi-circle-fill me-1" style="font-size:.45rem"></i>Aktif
+                            </span>
+                        @else
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle"
+                                  style="font-size:.72rem">
+                                <i class="bi bi-circle-fill me-1" style="font-size:.45rem"></i>Nonaktif
+                            </span>
+                        @endif
+                        @if($user->nip)
+                            <span class="text-muted" style="font-size:.78rem;font-family:monospace">
+                                NIP: {{ $user->nip }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="ms-auto text-end d-none d-md-block">
+                    <div class="text-muted" style="font-size:.75rem">Terdaftar sejak</div>
+                    <div style="font-size:.85rem;font-weight:600">{{ $user->created_at->format('d M Y') }}</div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ── FORM EDIT ────────────────────────────────── --}}
         <div class="card">
             <div class="card-header">
-                <i class="bi bi-person-plus-fill me-2"></i>Form Tambah Pengguna
+                <i class="bi bi-pencil-square me-2"></i>Edit Data Pengguna
             </div>
             <div class="card-body p-4">
 
-                <form action="{{ route('users.store') }}" method="POST" autocomplete="off">
+                <form action="{{ route('users.update', $user) }}" method="POST" autocomplete="off">
                     @csrf
+                    @method('PUT')
 
-                    {{-- ── INFORMASI DASAR ──────────────────── --}}
+                    {{-- ── INFORMASI DASAR ──────────────── --}}
                     <h6 class="section-label">Informasi Dasar</h6>
 
                     <div class="row g-3 mb-4">
@@ -41,8 +90,8 @@
                             <input type="text"
                                    name="name"
                                    class="form-control @error('name') is-invalid @enderror"
-                                   value="{{ old('name') }}"
-                                   placeholder="Contoh: Budi Santoso, S.Sos">
+                                   value="{{ old('name', $user->name) }}"
+                                   placeholder="Nama lengkap">
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -54,13 +103,12 @@
                             <input type="text"
                                    name="nip"
                                    class="form-control @error('nip') is-invalid @enderror"
-                                   value="{{ old('nip') }}"
+                                   value="{{ old('nip', $user->nip) }}"
                                    placeholder="18 digit NIP"
                                    maxlength="18">
                             @error('nip')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <div class="form-text">Nomor Induk Pegawai (opsional).</div>
                         </div>
 
                         {{-- Email --}}
@@ -71,12 +119,11 @@
                             <input type="email"
                                    name="email"
                                    class="form-control @error('email') is-invalid @enderror"
-                                   value="{{ old('email') }}"
-                                   placeholder="contoh@instansi.go.id">
+                                   value="{{ old('email', $user->email) }}"
+                                   placeholder="email@instansi.go.id">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <div class="form-text">Digunakan untuk login.</div>
                         </div>
 
                         {{-- No. Telepon --}}
@@ -85,7 +132,7 @@
                             <input type="text"
                                    name="phone"
                                    class="form-control @error('phone') is-invalid @enderror"
-                                   value="{{ old('phone') }}"
+                                   value="{{ old('phone', $user->phone) }}"
                                    placeholder="08xx-xxxx-xxxx">
                             @error('phone')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -93,7 +140,7 @@
                         </div>
                     </div>
 
-                    {{-- ── AKSES & JABATAN ──────────────────── --}}
+                    {{-- ── AKSES & JABATAN ──────────────── --}}
                     <h6 class="section-label">Akses & Jabatan</h6>
 
                     <div class="row g-3 mb-4">
@@ -108,7 +155,7 @@
                                 <option value="">-- Pilih Role --</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->value }}"
-                                        {{ old('role') === $role->value ? 'selected' : '' }}>
+                                        {{ old('role', $user->role->value) === $role->value ? 'selected' : '' }}>
                                         {{ $role->label() }}
                                     </option>
                                 @endforeach
@@ -116,8 +163,6 @@
                             @error('role')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-
-                            {{-- Deskripsi role --}}
                             <div id="roleDesc" class="form-text mt-2" style="display:none"></div>
                         </div>
 
@@ -126,10 +171,9 @@
                             <label class="form-label">Kantor / Unit Kerja</label>
                             <input type="text"
                                    name="office"
-                                   id="officeInput"
                                    list="officeList"
                                    class="form-control @error('office') is-invalid @enderror"
-                                   value="{{ old('office') }}"
+                                   value="{{ old('office', $user->office) }}"
                                    placeholder="Ketik atau pilih kantor...">
                             <datalist id="officeList">
                                 @foreach($offices as $office)
@@ -139,7 +183,6 @@
                             @error('office')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <div class="form-text">Kantor wilayah atau kantor pelayanan.</div>
                         </div>
 
                         {{-- Status Aktif --}}
@@ -150,28 +193,31 @@
                                        name="is_active"
                                        id="isActive"
                                        value="1"
-                                       {{ old('is_active', '1') ? 'checked' : '' }}>
+                                       {{ old('is_active', $user->is_active) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="isActive">
-                                    Akun langsung aktif setelah dibuat
+                                    Akun aktif (dapat login ke sistem)
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    {{-- ── PASSWORD ─────────────────────────── --}}
-                    <h6 class="section-label">Password</h6>
+                    {{-- ── GANTI PASSWORD ───────────────── --}}
+                    <h6 class="section-label">Ganti Password</h6>
+
+                    <div class="alert alert-warning py-2 mb-3" style="font-size:.82rem">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Kosongkan kolom password jika tidak ingin mengubah password.
+                    </div>
 
                     <div class="row g-3 mb-4">
                         <div class="col-12 col-md-6">
-                            <label class="form-label">
-                                Password <span class="text-danger">*</span>
-                            </label>
+                            <label class="form-label">Password Baru</label>
                             <div class="input-group">
                                 <input type="password"
                                        name="password"
                                        id="passwordInput"
                                        class="form-control @error('password') is-invalid @enderror"
-                                       placeholder="Min. 8 karakter">
+                                       placeholder="Kosongkan jika tidak diubah">
                                 <button type="button"
                                         class="btn btn-outline-secondary"
                                         id="togglePassword"
@@ -186,38 +232,47 @@
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <label class="form-label">
-                                Konfirmasi Password <span class="text-danger">*</span>
-                            </label>
+                            <label class="form-label">Konfirmasi Password Baru</label>
                             <input type="password"
                                    name="password_confirmation"
                                    id="passwordConfirm"
                                    class="form-control"
-                                   placeholder="Ulangi password">
+                                   placeholder="Ulangi password baru">
                             <div id="passwordMatch" class="form-text mt-1"></div>
                         </div>
                     </div>
 
-                    {{-- ── INFO ROLE ─────────────────────────── --}}
-                    <div class="alert alert-info py-2 mb-4" style="font-size:.83rem">
-                        <i class="bi bi-info-circle me-1"></i>
-                        <strong>Panduan Role:</strong>
-                        <ul class="mb-0 mt-1 ps-3">
-                            <li><strong>Staff DJKN Kanwil</strong> — dapat memverifikasi berkas & memajukan status pengajuan.</li>
-                            <li><strong>Staff KPKNL Pelayanan</strong> — dapat mengupload berkas & membuat pengajuan.</li>
-                            <li><strong>Kepala TIK</strong> — dapat mengelola semua data, konten, dan akun pengguna.</li>
-                            <li><strong>Calon Pensiunan</strong> — hanya dapat melihat dan memantau status pengajuannya.</li>
-                        </ul>
-                    </div>
+                    {{-- ── TOMBOL ───────────────────────── --}}
+                    <div class="d-flex gap-2 justify-content-between align-items-center">
+                        {{-- Hapus (kiri) --}}
+                        @if(!$user->applications()->exists())
+                            <form action="{{ route('users.destroy', $user) }}"
+                                  method="POST"
+                                  class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('Hapus akun {{ addslashes($user->name) }} secara permanen?')">
+                                    <i class="bi bi-trash-fill me-1"></i>Hapus Akun
+                                </button>
+                            </form>
+                        @else
+                            <span class="text-muted" style="font-size:.78rem">
+                                <i class="bi bi-lock-fill me-1"></i>
+                                Akun tidak dapat dihapus (memiliki data pengajuan)
+                            </span>
+                        @endif
 
-                    {{-- ── TOMBOL ───────────────────────────── --}}
-                    <div class="d-flex gap-2 justify-content-end">
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left me-1"></i>Batal
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-person-check-fill me-1"></i>Simpan Pengguna
-                        </button>
+                        {{-- Simpan & Batal (kanan) --}}
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Batal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-floppy-fill me-1"></i>Simpan Perubahan
+                            </button>
+                        </div>
                     </div>
 
                 </form>
@@ -240,6 +295,20 @@
         border-bottom: 2px solid var(--accent);
         padding-bottom: .4rem;
         margin-bottom: 1rem;
+    }
+
+    .user-avatar-lg {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
 </style>
 @endsection
@@ -264,7 +333,8 @@
     function checkPasswordMatch() {
         const pw  = passwordInput.value;
         const cpw = passwordConfirm.value;
-        if (!cpw) { matchMsg.textContent = ''; return; }
+        if (!pw && !cpw) { matchMsg.textContent = ''; return; }
+        if (!cpw)        { matchMsg.textContent = ''; return; }
         if (pw === cpw) {
             matchMsg.innerHTML = '<span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Password cocok</span>';
         } else {
@@ -283,8 +353,8 @@
         'pensiunan':  ' Hanya dapat melihat status pengajuan miliknya sendiri.',
     };
 
-    const roleSelect    = document.getElementById('roleSelect');
-    const roleDescEl    = document.getElementById('roleDesc');
+    const roleSelect = document.getElementById('roleSelect');
+    const roleDescEl = document.getElementById('roleDesc');
 
     roleSelect.addEventListener('change', () => {
         const desc = roleDesc[roleSelect.value];
@@ -296,7 +366,7 @@
         }
     });
 
-    // Trigger on load (jika old value ada)
+    // Trigger on load
     if (roleSelect.value) roleSelect.dispatchEvent(new Event('change'));
 </script>
 @endsection

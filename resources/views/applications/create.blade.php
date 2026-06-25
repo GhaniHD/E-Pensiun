@@ -37,6 +37,26 @@
                 <form action="{{ route('applications.store') }}" method="POST">
                     @csrf
 
+                    {{-- Pilih Pegawai (hanya SDM Kantor yang akses halaman ini) --}}
+<div class="mb-4">
+    <label for="user_id" class="form-label fw-semibold">
+        Nama Pegawai <span class="text-danger">*</span>
+    </label>
+    <select id="user_id" name="user_id"
+            class="form-select @error('user_id') is-invalid @enderror">
+        <option value="">— Pilih pegawai —</option>
+        @foreach($pensiunanUsers as $pegawai)
+            <option value="{{ $pegawai->id }}"
+                {{ old('user_id') == $pegawai->id ? 'selected' : '' }}>
+                {{ $pegawai->name }} — {{ $pegawai->nip ?? '-' }}
+            </option>
+        @endforeach
+    </select>
+    @error('user_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
                     {{-- Jenis Pensiun --}}
                     <div class="mb-4">
                         <label for="pension_type_id" class="form-label fw-semibold">

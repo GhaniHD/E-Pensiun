@@ -30,8 +30,6 @@ class Application extends Model
             'status' => ApplicationStatus::class,
             'pension_date' => 'date',
             'sk_issued_at' => 'datetime',
-            'from_status' => ApplicationStatus::class,
-            'to_status' => ApplicationStatus::class,
         ];
     }
 
@@ -61,7 +59,6 @@ class Application extends Model
     {
         return $this->hasMany(ApplicationStatusHistory::class);
     }
-
 
     // ── Scopes ─────────────────────────────────────────────
 
@@ -115,7 +112,6 @@ class Application extends Model
 
         $this->save();
 
-        // Record history
         $this->statusHistories()->create([
             'from_status' => $oldStatus->value,
             'to_status' => $nextStatus->value,
@@ -125,6 +121,7 @@ class Application extends Model
 
         return true;
     }
+
 
     public function rejectApplication(User $actor, string $note): bool
     {
@@ -143,10 +140,86 @@ class Application extends Model
         return true;
     }
 
+    /** Kembalikan ke tahap Upload untuk perbaikan berkas */
+    public function returnToUpload(User $actor, string $note): bool
+    {
+        $oldStatus = $this->status;
+        $this->status = ApplicationStatus::UPLOAD;
+        $this->rejection_note = $note;
+        $this->save();
+
+        $this->statusHistories()->create([
+            'from_status' => $oldStatus->value,
+            'to_status' => ApplicationStatus::UPLOAD->value,
+            'changed_by' => $actor->id,
+            'note' => 'DIKEMBALIKAN KE UPLOAD: ' . $note,
+        ]);
+
+        return true;
+    }
+
     public function getProgressPercentageAttribute(): int
     {
         $total = count(ApplicationStatus::allOrdered());
         $current = $this->status->order();
         return (int) round(($current / $total) * 100);
+    }
+
+
+    public function isCancelled(): bool
+    {
+        return $this->status === ApplicationStatus::DIBATALKAN;
+    }
+
+    /** Status yang masih boleh dibatalkan oleh sdm_kantor */
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, [
+            ApplicationStatus::PENGISIAN_FORM,
+            ApplicationStatus::PEMBERKASAN,
+            ApplicationStatus::UPLOAD,
+        ]);
+    }
+
+    public function cancelApplication(User $actor, string $note): bool
+    {
+        $oldStatus = $this->status;
+        $this->status = ApplicationStatus::DIBATALKAN;
+        $this->rejection_note = $note;
+        $this->save();
+
+        $this->statusHistories()->create([
+            'from_status' => $oldStatus->value,
+            'to_status' => ApplicationStatus::DIBATALKAN->value,
+            'changed_by' => $actor->id,
+            'note' => 'DIBATALKAN: ' . $note,
+        ]);
+
+        return true;
+    }
+    // ── Checklist helpers ──────────────────────────────────
+
+    /** Apakah semua dokumen sudah dicek oleh KPKNL */
+    public function allDocumentsCheckedByKantor(): bool
+    {
+        if ($this->documents->isEmpty())
+            return false;
+        return $this->documents->every(fn($d) => !is_null($d->kantor_check_status));
+    }
+
+    /** Berapa dokumen bermasalah saat dicek KPKNL */
+    public function problematicDocumentsCount(): int
+    {
+        return $this->documents->filter(
+            fn($d) => in_array($d->kantor_check_status, ['lengkap_tidak_sesuai', 'tidak_lengkap'])
+        )->count();
+    }
+
+    /** Apakah semua dokumen sudah dicek "Sesuai" oleh Kanwil */
+    public function allDocumentsApprovedByKanwil(): bool
+    {
+        if ($this->documents->isEmpty())
+            return false;
+        return $this->documents->every(fn($d) => $d->kanwil_status === 'sesuai');
     }
 }

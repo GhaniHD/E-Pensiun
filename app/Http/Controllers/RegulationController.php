@@ -36,7 +36,9 @@ class RegulationController extends Controller
 
     public function create()
     {
-        return view('regulations.create');
+        $categories = Regulation::active()->select('category')->distinct()->pluck('category');
+
+        return view('regulations.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -103,6 +105,20 @@ class RegulationController extends Controller
 
         return redirect()->route('regulations.index')
             ->with('success', 'Peraturan/UU berhasil dihapus.');
+    }
+
+    public function preview(Regulation $regulation)
+    {
+        if (!$regulation->file_path || !Storage::disk('public')->exists($regulation->file_path)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $fullPath = Storage::disk('public')->path($regulation->file_path);
+
+        return response()->file($fullPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $regulation->title . '.pdf"',
+        ]);
     }
 
     public function download(Regulation $regulation)

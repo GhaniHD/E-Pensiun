@@ -35,4 +35,27 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | BKN — SI ASN
+    |--------------------------------------------------------------------------
+    | URL resmi website SI ASN BKN untuk tombol "Ajukan ke SI ASN BKN"
+    | pada halaman detail pengajuan (role Staff DJKN Kanwil).
+    | Set via .env: SIASN_BKN_URL=https://...
+    */
+    'bkn' => [
+        'siasn_url' => env('SIASN_BKN_URL', 'https://siasn.bkn.go.id'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | SOP Infografis
+    |--------------------------------------------------------------------------
+    | Path relatif dari public/ ke file gambar infografis SOP alur pengajuan.
+    | Set via .env: SOP_IMAGE_PATH=images/sop-alur-pensiun.jpg
+    */
+    'sop' => [
+        'image_path' => env('SOP_IMAGE_PATH', null),
+    ],
+
 ];

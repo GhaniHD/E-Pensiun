@@ -102,17 +102,47 @@
                             </div>
 
                             {{-- Tombol unduh contoh --}}
+                              {{-- Tombol unduh / upload contoh --}}
                             @if($template->file_path)
-                                <a href="{{ route('document-templates.download', $template) }}"
-                                   class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 flex-shrink-0"
-                                   title="Unduh contoh format">
-                                    <i class="bi bi-download"></i>
-                                    <span class="d-none d-md-inline">Unduh Contoh</span>
-                                </a>
+                                <a href="{{ route('document-templates.preview', $template) }}" target="_blank"
+                                    class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 flex-shrink-0"
+                                    title="Lihat contoh format">
+                                        <i class="bi bi-eye"></i>
+                                        <span class="d-none d-md-inline">Lihat Contoh</span>
+                                    </a>
+                                    <a href="{{ route('document-templates.download', $template) }}"
+                                    class="btn btn-outline-secondary btn-sm d-flex align-items-center flex-shrink-0"
+                                    title="Unduh contoh format">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                @if(auth()->user()->isSdmKanwil() || auth()->user()->isTik())
+                                    <form action="{{ route('document-templates.upload', $template) }}" method="POST"
+                                          enctype="multipart/form-data" class="upload-template-form d-flex align-items-center gap-1 flex-shrink-0">
+                                        @csrf
+                                        <input type="file" name="file" accept="application/pdf"
+                                               class="form-control form-control-sm" style="max-width:140px;font-size:0.75rem">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm" title="Ganti contoh">
+                                            <i class="bi bi-arrow-repeat"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             @else
-                                <span class="text-muted" style="font-size:0.75rem;white-space:nowrap;flex-shrink:0">
-                                    <i class="bi bi-dash"></i> Tidak ada contoh
-                                </span>
+                                @if(auth()->user()->isSdmKanwil() || auth()->user()->isTik())
+                                    <form action="{{ route('document-templates.upload', $template) }}" method="POST"
+                                          enctype="multipart/form-data" class="upload-template-form d-flex align-items-center gap-1 flex-shrink-0">
+                                        @csrf
+                                        <input type="file" name="file" accept="application/pdf"
+                                               class="form-control form-control-sm" style="max-width:140px;font-size:0.75rem" required>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm" title="Unggah contoh format">
+                                            <i class="bi bi-upload"></i>
+                                            <span class="d-none d-md-inline">Unggah</span>
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-muted" style="font-size:0.75rem;white-space:nowrap;flex-shrink:0">
+                                        <i class="bi bi-dash"></i> Tidak ada contoh
+                                    </span>
+                                @endif
                             @endif
 
                         </div>

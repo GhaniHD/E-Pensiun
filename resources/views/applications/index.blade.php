@@ -12,11 +12,11 @@
             Kelola dan pantau status semua pengajuan pensiun
         </p>
     </div>
-    @if(auth()->user()->isPensiunan() || auth()->user()->isSdmKantor())
-        <a href="{{ route('applications.create') }}" class="btn btn-primary">   
-            <i class="bi bi-plus-circle-fill me-1"></i> Buat Pengajuan Baru
-        </a>
-    @endif
+   @if(auth()->user()->isSdmKantor())
+    <a href="{{ route('applications.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle-fill me-1"></i> Buat Pengajuan Baru
+    </a>
+@endif
 </div>
 
 {{-- ── FILTER BAR ───────────────────────────────────────────── --}}
@@ -32,6 +32,11 @@
                             {{ request('status') === $status->value ? 'selected' : '' }}>
                             {{ $status->label() }}
                         </option>
+                        <option value="dibatalkan"
+                        {{ request('status') === 'dibatalkan' ? 'selected' : '' }}>
+                        Dibatalkan
+                    </option>
+
                     @endforeach
                 </select>
             </div>
@@ -97,7 +102,7 @@
                 </thead>
                 <tbody>
                     @forelse($applications as $app)
-                        <tr>
+                        <tr class="{{ $app->isCancelled() ? 'table-danger opacity-75' : '' }}">
                             <td class="ps-3 text-muted" style="font-size:.82rem">
                                 {{ $applications->firstItem() + $loop->index }}
                             </td>

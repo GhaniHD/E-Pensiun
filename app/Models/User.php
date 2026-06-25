@@ -13,28 +13,19 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'office',
-        'nip',
-        'phone',
-        'is_active',
+        'name', 'email', 'password',
+        'role', 'office', 'nip', 'phone', 'is_active',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'role' => UserRole::class,
-            'is_active' => 'boolean',
+            'password'          => 'hashed',
+            'role'              => UserRole::class,
+            'is_active'         => 'boolean',
         ];
     }
 
@@ -79,7 +70,12 @@ class User extends Authenticatable
 
     public function canVerify(): bool
     {
-        return $this->role->canVerify();
+        return $this->role->canVerify(); // sdm_kanwil saja
+    }
+
+    public function canKantorCheck(): bool
+    {
+        return $this->role->canKantorCheck(); // sdm_kantor saja
     }
 
     public function canUpload(): bool
@@ -95,5 +91,13 @@ class User extends Authenticatable
     public function getRoleLabelAttribute(): string
     {
         return $this->role->label();
+    }
+
+    /** Ambil URL folder Teams berdasarkan kantor user */
+    public function getTeamsFolderUrlAttribute(): ?string
+    {
+        if (!$this->office) return null;
+        $office = \App\Models\Office::where('name', $this->office)->first();
+        return $office?->teams_folder_url;
     }
 }
