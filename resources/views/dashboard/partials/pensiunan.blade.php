@@ -20,17 +20,44 @@
 
 {{-- ── BARIS 1: Status Pengajuan ───────────────────────────── --}}
 @if(!$application)
-<div class="card mb-4">
-    <div class="card-body text-center py-5">
-        <i class="bi bi-file-earmark-plus" style="font-size:3rem;color:#2E86C1;opacity:.5"></i>
-        <h5 class="mt-3 mb-1" style="color:#1B4F72">Belum Ada Pengajuan</h5>
-        <p class="text-muted mb-0" style="font-size:.875rem">
-            Pengajuan pensiun Anda akan dibuatkan oleh Staff KPKNL Pelayanan.<br>
-            Silakan hubungi kantor pelayanan untuk memulai proses.
-        </p>
-        <div class="mt-4 p-3 rounded d-inline-block" style="background:#eef4fb;font-size:.85rem;color:#1B4F72">
-            <i class="bi bi-telephone-fill me-1"></i>
-            Hubungi <strong>Staff KPKNL Pelayanan</strong> untuk membuat pengajuan
+
+<div class="row g-3 mb-4">
+    {{-- Card Belum Ada Pengajuan --}}
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-file-earmark-plus" style="font-size:3rem;color:#2E86C1;opacity:.5"></i>
+                <h5 class="mt-3 mb-1" style="color:#1B4F72">Belum Ada Pengajuan</h5>
+                <p class="text-muted mb-0" style="font-size:.875rem">
+                    Pengajuan pensiun Anda akan dibuatkan oleh Staff KPKNL Pelayanan.<br>
+                    Silakan hubungi kantor pelayanan untuk memulai proses.
+                </p>
+                <div class="mt-4 p-3 rounded d-inline-block" style="background:#eef4fb;font-size:.85rem;color:#1B4F72">
+                    <i class="bi bi-telephone-fill me-1"></i>
+                    Hubungi <strong>Staff KPKNL Pelayanan</strong> untuk membuat pengajuan
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Infografis SOP --}}
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-diagram-3-fill text-primary"></i> Infografis SOP
+            </div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="padding:10px;overflow:hidden;">
+                @if(file_exists(public_path('images/sop-pensiun.png')))
+                    <img src="{{ asset('images/sop-pensiun.png') }}"
+                         alt="Infografis SOP Alur Pengajuan Pensiun"
+                         style="width:100%;height:100%;object-fit:contain;">
+                @else
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-image" style="font-size:1.8rem;display:block;margin-bottom:.5rem;"></i>
+                        <small>Letakkan <code>images/sop-pensiun.png</code></small>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -129,25 +156,25 @@
     </div>
 
     {{-- Kolom kanan: Infografis SOP --}}
-<div class="col-12 col-lg-5">
-    <div class="card h-100">
-        <div class="card-header d-flex align-items-center gap-2">
-            <i class="bi bi-diagram-3-fill text-primary"></i> Infografis SOP
-        </div>
-        <div class="card-body d-flex align-items-center justify-content-center" style="padding:10px; overflow:hidden;">
-            @if(file_exists(public_path('images/sop-pensiun.png')))
-                <img src="{{ asset('images/sop-pensiun.png') }}"
-                     alt="Infografis SOP Alur Pengajuan Pensiun"
-                     style="width:100%; height:100%; object-fit:contain;">
-            @else
-                <div class="text-center text-muted py-3">
-                    <i class="bi bi-image" style="font-size:1.8rem;display:block;margin-bottom:.5rem;"></i>
-                    <small>Letakkan <code>images/sop-pensiun.png</code></small>
-                </div>
-            @endif
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-diagram-3-fill text-primary"></i> Infografis SOP
+            </div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="padding:10px;overflow:hidden;">
+                @if(file_exists(public_path('images/sop-pensiun.png')))
+                    <img src="{{ asset('images/sop-pensiun.png') }}"
+                         alt="Infografis SOP Alur Pengajuan Pensiun"
+                         style="width:100%;height:100%;object-fit:contain;">
+                @else
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-image" style="font-size:1.8rem;display:block;margin-bottom:.5rem;"></i>
+                        <small>Letakkan <code>images/sop-pensiun.png</code></small>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 {{-- Row: Kelengkapan Berkas (di bawah, full width) --}}
@@ -210,6 +237,7 @@
         </div>
     </div>
 </div>
+
 @endif
 
 {{-- ── BARIS 3: Artikel & Regulasi Terbaru ────────────────── --}}
