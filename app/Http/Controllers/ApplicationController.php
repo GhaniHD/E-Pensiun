@@ -168,46 +168,67 @@ class ApplicationController extends Controller
         $user = Auth::user();
         $status = $application->status->value;
 
-        // --- SDM KANTOR ---
+        // ── STEP 1: Cek akses role ─────────────────────────
         if ($user->isSdmKantor()) {
-            if ($status === ApplicationStatus::PEMBERKASAN->value) {
-                // Konfirmasi berkas fisik → boleh langsung advance ke UPLOAD
-            } elseif ($status === ApplicationStatus::UPLOAD->value) {
-                // Ajukan ke Verifikasi KPKNL — semua file harus terupload
-                $totalTemplate = $application->pensionType->documentTemplates()->count();
-                $totalUploaded = $application->documents()->whereNotNull('file_path')->count();
-                if ($totalUploaded < $totalTemplate) {
-                    return back()->with('error', 'Semua berkas harus diunggah terlebih dahulu.');
-                }
-            } elseif ($status === ApplicationStatus::VERIFIKASI_KPKNL->value) {
-                // Ajukan ke Kanwil — semua dokumen harus sudah dicek
-                $application->load('documents');
-                if (!$application->allDocumentsCheckedByKantor()) {
-                    return back()->with('error', 'Semua berkas harus dicek terlebih dahulu sebelum diajukan ke DJKN Kanwil.');
-                }
-                // Jika ada dokumen bermasalah, tetap boleh diteruskan (keputusan manual)
-            } else {
+            $allowedStages = [
+                ApplicationStatus::PEMBERKASAN->value,
+                ApplicationStatus::UPLOAD->value,
+                ApplicationStatus::VERIFIKASI_KPKNL->value,
+            ];
+            if (!in_array($status, $allowedStages)) {
                 abort(403, 'Anda tidak memiliki akses untuk memajukan tahap ini.');
             }
-        }
-        // --- SDM KANWIL ---
-        elseif ($user->isSdmKanwil()) {
-            if ($status === ApplicationStatus::VERIFIKASI_KANWIL->value) {
-                // Advance ke ACC — semua dokumen harus berstatus "Sesuai"
-                $application->load('documents');
-                if (!$application->allDocumentsApprovedByKanwil()) {
-                    return back()->with('error', 'Semua berkas harus berstatus "Sesuai" sebelum pengajuan dapat di-ACC.');
-                }
+        } elseif ($user->isSdmKanwil()) {
+            // sdm_kanwil bisa advance semua tahap
+        } elseif ($user->isTik()) {
+            // TIK (admin) bisa advance semua tahap, lewati semua validasi tahap
+            if (!$application->canAdvance()) {
+                return back()->with('error', 'Pengajuan sudah pada tahap akhir.');
             }
-            // sdm_kanwil bisa advance tahap lain (ACC → SK Terbit, dll.)
-        }
-        // --- TIK ---
-        elseif ($user->isTik()) {
-            // TIK (admin) bisa advance semua tahap
+            $application->advanceStatus($user, $request->note);
+            return back()->with('success', 'Status berhasil dimajukan ke: ' . $application->fresh()->status->label());
         } else {
             abort(403);
         }
 
+        // ── STEP 2: Validasi kelengkapan per tahap (universal) ─
+        // Berlaku untuk sdm_kantor & sdm_kanwil tanpa duplikasi
+
+        if ($status === ApplicationStatus::UPLOAD->value) {
+            $totalTemplate = $application->pensionType->documentTemplates()->count();
+            $totalUploaded = $application->documents()->whereNotNull('file_path')->count();
+
+            if ($totalUploaded < $totalTemplate) {
+                return back()->with(
+                    'error',
+                    "Semua berkas harus diunggah terlebih dahulu ({$totalUploaded}/{$totalTemplate})."
+                );
+            }
+        }
+
+        if ($status === ApplicationStatus::VERIFIKASI_KPKNL->value) {
+            $application->load('documents');
+
+            if (!$application->allDocumentsCheckedByKantor()) {
+                return back()->with(
+                    'error',
+                    'Semua berkas harus dicek KPKNL terlebih dahulu sebelum diajukan ke DJKN Kanwil.'
+                );
+            }
+        }
+
+        if ($status === ApplicationStatus::VERIFIKASI_KANWIL->value) {
+            $application->load('documents');
+
+            if (!$application->allDocumentsApprovedByKanwil()) {
+                return back()->with(
+                    'error',
+                    'Semua berkas harus berstatus "Sesuai" sebelum pengajuan dapat di-ACC.'
+                );
+            }
+        }
+
+        // ── STEP 3: Advance ────────────────────────────────
         if (!$application->canAdvance()) {
             return back()->with('error', 'Pengajuan sudah pada tahap akhir.');
         }

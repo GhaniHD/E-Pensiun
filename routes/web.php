@@ -51,11 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/berkas-contoh/{documentTemplate}/preview', [PensionTypeController::class, 'previewTemplate'])
         ->name('document-templates.preview');
 
-    Route::middleware('role:tik')->group(function () {
+    Route::middleware('role:tik,sdm_kanwil')->group(function () {
         Route::post('/berkas-contoh/{documentTemplate}/upload', [PensionTypeController::class, 'uploadTemplate'])
             ->name('document-templates.upload');
     });
-
     // ── Pengajuan ──────────────────────────────────────────
     Route::get('/pengajuan', [ApplicationController::class, 'index'])
         ->name('applications.index');
