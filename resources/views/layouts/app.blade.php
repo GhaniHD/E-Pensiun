@@ -9,8 +9,8 @@
     @yield('styles')
     <style>
         :root {
-            --primary:   #1B4F72;
-            --accent:    #2E86C1;
+            --primary:   #1A5632;
+            --accent:    #27AE60;
             --success:   #1E8449;
             --warning:   #D4AC0D;
             --danger:    #C0392B;

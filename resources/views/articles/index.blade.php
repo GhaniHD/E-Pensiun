@@ -77,7 +77,7 @@
                                  class="article-thumb">
                         @else
                             <div class="article-thumb d-flex align-items-center justify-content-center"
-                                 style="background:linear-gradient(135deg,#1B4F72,#2E86C1)">
+                                 style="background:linear-gradient(135deg,#1A5632,#27AE60)">
                                 <i class="bi bi-newspaper" style="font-size:2.2rem;color:#fff;opacity:0.7"></i>
                             </div>
                         @endif

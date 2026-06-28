@@ -41,7 +41,7 @@
             datasets: [{
                 label: 'Jumlah Pengajuan',
                 data: monthlyValues,
-                backgroundColor: '#2E86C1',
+                backgroundColor: '#27AE60',
                 borderRadius: 6,
                 borderSkipped: false,
             }]
@@ -63,7 +63,7 @@
             labels: officeLabels,
             datasets: [{
                 data: officeValues,
-                backgroundColor: ['#1B4F72','#2E86C1','#1E8449','#D4AC0D','#C0392B','#7D3C98'],
+                backgroundColor: ['#1A5632','#27AE60','#1E8449','#D4AC0D','#C0392B','#7D3C98'],
                 borderWidth: 2,
                 borderColor: '#fff'
             }]

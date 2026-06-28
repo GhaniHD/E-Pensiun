@@ -11,11 +11,11 @@
     .step-item { flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;min-width:80px; }
     .step-circle { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;border:3px solid #dee2e6;background:#fff;transition:all .3s; }
     .step-circle.done    { background:var(--bs-success,#1E8449);border-color:var(--bs-success,#1E8449);color:#fff; }
-    .step-circle.current { background:#2E86C1;border-color:#2E86C1;color:#fff;box-shadow:0 0 0 4px rgba(46,134,193,.25);animation:pulse 1.8s infinite; }
+    .step-circle.current { background:#27AE60;border-color:#27AE60;color:#fff;box-shadow:0 0 0 4px rgba(46,134,193,.25);animation:pulse 1.8s infinite; }
     .step-circle.pending { background:#f8f9fa;border-color:#dee2e6;color:#adb5bd; }
     @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px rgba(46,134,193,.25);}50%{box-shadow:0 0 0 8px rgba(46,134,193,.12);} }
     .step-label { font-size:.68rem;text-align:center;margin-top:.5rem;color:#6c757d;max-width:80px;line-height:1.3; }
-    .step-label.current { color:#2E86C1;font-weight:600; }
+    .step-label.current { color:#27AE60;font-weight:600; }
     .step-label.done { color:#1E8449; }
 
     /* ── TIMELINE ───────────────────────────────────────── */
@@ -23,7 +23,7 @@
     .timeline::before { content:'';position:absolute;left:.75rem;top:0;bottom:0;width:2px;background:#dee2e6; }
     .timeline-item { position:relative;padding-bottom:1.5rem; }
     .timeline-item:last-child { padding-bottom:0; }
-    .timeline-dot { position:absolute;left:-1.45rem;top:.25rem;width:14px;height:14px;border-radius:50%;background:var(--accent,#2E86C1);border:2px solid #fff;box-shadow:0 0 0 2px var(--accent,#2E86C1); }
+    .timeline-dot { position:absolute;left:-1.45rem;top:.25rem;width:14px;height:14px;border-radius:50%;background:var(--accent,#27AE60);border:2px solid #fff;box-shadow:0 0 0 2px var(--accent,#27AE60); }
     .timeline-dot.rejected { background:#C0392B;box-shadow:0 0 0 2px #C0392B; }
 
     /* ── DOCUMENT ITEM ──────────────────────────────────── */
@@ -183,7 +183,7 @@
                     <svg viewBox="0 0 36 36" style="width:100%;height:100%;transform:rotate(-90deg)">
                         <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#e9ecef" stroke-width="3"/>
                         <circle cx="18" cy="18" r="15.9155" fill="none"
-                                stroke="#2E86C1" stroke-width="3"
+                                stroke="#27AE60" stroke-width="3"
                                 stroke-dasharray="{{ $application->progress_percentage }}, 100"
                                 stroke-linecap="round"/>
                     </svg>
@@ -334,7 +334,7 @@
                         {{-- ═══ PANEL CHECKLIST KPKNL (Fitur 2) — Mode Bulk ═══ --}}
                         @if(auth()->user()->isSdmKantor() && $uploaded && $isKpknlStage)
                             <div class="check-panel mt-2">
-                                <div class="fw-semibold mb-2" style="font-size:.82rem;color:#1B4F72">
+                                <div class="fw-semibold mb-2" style="font-size:.82rem;color:#1A5632">
                                     <i class="bi bi-clipboard2-check me-1"></i>Pengecekan KPKNL Pelayanan
                                 </div>
                                 {{-- Inputs terasosiasi dengan #bulk-kantor-form (tanpa nested form) --}}
@@ -525,10 +525,10 @@
 
     {{-- Tahap PEMBERKASAN → UPLOAD --}}
     @if($application->status->value === \App\Enums\ApplicationStatus::PEMBERKASAN->value)
-    <div class="card mb-4" style="border-left:4px solid #2E86C1">
+    <div class="card mb-4" style="border-left:4px solid #27AE60">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
-                <div class="fw-semibold" style="color:#1B4F72">
+                <div class="fw-semibold" style="color:#1A5632">
                     <i class="bi bi-file-earmark-check-fill me-1"></i>Konfirmasi Berkas Fisik
                 </div>
                 <div class="text-muted" style="font-size:.83rem">

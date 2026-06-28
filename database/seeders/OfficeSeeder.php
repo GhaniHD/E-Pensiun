@@ -9,19 +9,19 @@ class OfficeSeeder extends Seeder
 {
     public function run(): void
     {
-        // Daftar kantor ini diisi oleh klien sesuai data nyata.
+        // Daftar KPKNL Pelayanan sesuai wilayah kerja DJKN Kanwil Jawa Barat.
         // URL folder Teams diisi setelah klien menyediakan link-nya.
         $offices = [
             // KPKNL Pelayanan (role sdm_kantor)
-            ['name' => 'KPKNL Jakarta I',   'type' => 'kpknl', 'teams_folder_url' => null],
-            ['name' => 'KPKNL Jakarta II',  'type' => 'kpknl', 'teams_folder_url' => null],
-            ['name' => 'KPKNL Bandung',     'type' => 'kpknl', 'teams_folder_url' => null],
-            ['name' => 'KPKNL Surabaya',    'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Bandung',    'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Bekasi',     'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Bogor',      'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Cirebon',    'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Purwakarta', 'type' => 'kpknl', 'teams_folder_url' => null],
+            ['name' => 'KPKNL Sukabumi',   'type' => 'kpknl', 'teams_folder_url' => null],
 
             // DJKN Kanwil (role sdm_kanwil)
-            ['name' => 'DJKN Kanwil Jakarta',  'type' => 'kanwil', 'teams_folder_url' => null],
-            ['name' => 'DJKN Kanwil Bandung',  'type' => 'kanwil', 'teams_folder_url' => null],
-            ['name' => 'DJKN Kanwil Surabaya', 'type' => 'kanwil', 'teams_folder_url' => null],
+            ['name' => 'DJKN Kanwil Jawa Barat', 'type' => 'kanwil', 'teams_folder_url' => null],
         ];
 
         foreach ($offices as $office) {

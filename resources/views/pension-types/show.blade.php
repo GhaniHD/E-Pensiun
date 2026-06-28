@@ -14,7 +14,7 @@
     </nav>
 
     {{-- Header Card --}}
-    <div class="card mb-4" style="background:linear-gradient(135deg,#1B4F72,#2E86C1);border:none">
+    <div class="card mb-4" style="background:linear-gradient(135deg,#1A5632,#27AE60);border:none">
         <div class="card-body py-4 px-4">
             <div class="d-flex align-items-center gap-4 flex-wrap">
                 <div style="width:72px;height:72px;border-radius:16px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">

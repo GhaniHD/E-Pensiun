@@ -125,7 +125,7 @@
         width: 52px;
         height: 52px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #1B4F72, #2E86C1);
+        background: linear-gradient(135deg, #1A5632, #27AE60);
         display: flex;
         align-items: center;
         justify-content: center;

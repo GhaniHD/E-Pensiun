@@ -73,7 +73,7 @@
                                             <img src="{{ Storage::url($item->thumbnail) }}" alt=""
                                                  style="width:56px;height:56px;object-fit:cover;border-radius:6px;flex-shrink:0">
                                         @else
-                                            <div style="width:56px;height:56px;border-radius:6px;flex-shrink:0;background:linear-gradient(135deg,#1B4F72,#2E86C1);display:flex;align-items:center;justify-content:center">
+                                            <div style="width:56px;height:56px;border-radius:6px;flex-shrink:0;background:linear-gradient(135deg,#1A5632,#27AE60);display:flex;align-items:center;justify-content:center">
                                                 <i class="bi bi-newspaper text-white"></i>
                                             </div>
                                         @endif

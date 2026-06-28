@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --primary: #1B4F72;
-            --accent:  #2E86C1;
+            --primary: #1A5632;
+            --accent:  #27AE60;
         }
 
         * { box-sizing: border-box; }

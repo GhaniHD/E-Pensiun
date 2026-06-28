@@ -45,14 +45,14 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // SDM 6 Kantor Pelayanan
+        // SDM 6 KPKNL
         $offices = [
-            'Kantor Pelayanan 1',
-            'Kantor Pelayanan 2',
-            'Kantor Pelayanan 3',
-            'Kantor Pelayanan 4',
-            'Kantor Pelayanan 5',
-            'Kantor Pelayanan 6',
+            'KPKNL Bandung',
+            'KPKNL Bekasi',
+            'KPKNL Bogor',
+            'KPKNL Cirebon',
+            'KPKNL Purwakarta',
+            'KPKNL Sukabumi',
         ];
 
         foreach ($offices as $i => $office) {
@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
             'email'     => 'budi@pensiun.go.id',
             'password'  => Hash::make('password'),
             'role'      => UserRole::PENSIUNAN,
-            'office'    => 'Kantor Pelayanan 1',
+            'office'    => 'KPKNL Bandung',
             'is_active' => true,
         ]);
 
@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
             'email'     => 'siti@pensiun.go.id',
             'password'  => Hash::make('password'),
             'role'      => UserRole::PENSIUNAN,
-            'office'    => 'Kantor Pelayanan 2',
+            'office'    => 'KPKNL Bekasi',
             'is_active' => true,
         ]);
     }

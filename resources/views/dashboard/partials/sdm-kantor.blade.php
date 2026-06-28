@@ -1,7 +1,7 @@
 @php $user = auth()->user(); @endphp
 
 {{-- Welcome --}}
-<div class="card mb-4" style="background: linear-gradient(135deg, #1B4F72, #2E86C1); color:#fff; border:none">
+<div class="card mb-4" style="background: linear-gradient(135deg, #1A5632, #27AE60); color:#fff; border:none">
     <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
             <h5 class="fw-bold mb-0">Selamat datang, {{ $user->name }}!</h5>
@@ -18,7 +18,7 @@
 {{-- Stat Cards --}}
 <div class="row g-3 mb-4">
     <div class="col-6 col-xl-3">
-        <div class="stat-card" style="background:#1B4F72">
+        <div class="stat-card" style="background:#1A5632">
             <div>
                 <div class="stat-value">{{ $stats['total'] }}</div>
                 <div class="stat-label">Total Pengajuan</div>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-6 col-xl-3">
-        <div class="stat-card" style="background:#2E86C1">
+        <div class="stat-card" style="background:#27AE60">
             <div>
                 <div class="stat-value">{{ $stats['thisMonth'] }}</div>
                 <div class="stat-label">Bulan Ini</div>

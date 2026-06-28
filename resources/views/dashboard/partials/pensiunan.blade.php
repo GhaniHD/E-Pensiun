@@ -4,7 +4,7 @@
 @endphp
 
 {{-- Welcome --}}
-<div class="card mb-4" style="background:linear-gradient(135deg,#1B4F72,#2E86C1);color:#fff;border:none">
+<div class="card mb-4" style="background:linear-gradient(135deg,#1A5632,#27AE60);color:#fff;border:none">
     <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
             <h5 class="fw-bold mb-0">Selamat datang, {{ $user->name }}!</h5>
@@ -26,13 +26,13 @@
     <div class="col-12 col-lg-7">
         <div class="card h-100">
             <div class="card-body text-center py-5">
-                <i class="bi bi-file-earmark-plus" style="font-size:3rem;color:#2E86C1;opacity:.5"></i>
-                <h5 class="mt-3 mb-1" style="color:#1B4F72">Belum Ada Pengajuan</h5>
+                <i class="bi bi-file-earmark-plus" style="font-size:3rem;color:#27AE60;opacity:.5"></i>
+                <h5 class="mt-3 mb-1" style="color:#1A5632">Belum Ada Pengajuan</h5>
                 <p class="text-muted mb-0" style="font-size:.875rem">
                     Pengajuan pensiun Anda akan dibuatkan oleh Staff KPKNL Pelayanan.<br>
                     Silakan hubungi kantor pelayanan untuk memulai proses.
                 </p>
-                <div class="mt-4 p-3 rounded d-inline-block" style="background:#eef4fb;font-size:.85rem;color:#1B4F72">
+                <div class="mt-4 p-3 rounded d-inline-block" style="background:#eef4fb;font-size:.85rem;color:#1A5632">
                     <i class="bi bi-telephone-fill me-1"></i>
                     Hubungi <strong>Staff KPKNL Pelayanan</strong> untuk membuat pengajuan
                 </div>
@@ -67,18 +67,18 @@
 {{-- Info Cards --}}
 <div class="row g-3 mb-4">
     <div class="col-12 col-md-4">
-        <div class="card h-100" style="border-left:4px solid #1B4F72">
+        <div class="card h-100" style="border-left:4px solid #1A5632">
             <div class="card-body">
                 <div class="text-muted mb-1" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.05em">Jenis Pensiun</div>
-                <div class="fw-bold" style="color:#1B4F72;font-size:.95rem">{{ $application->pensionType->name }}</div>
+                <div class="fw-bold" style="color:#1A5632;font-size:.95rem">{{ $application->pensionType->name }}</div>
             </div>
         </div>
     </div>
     <div class="col-12 col-md-4">
-        <div class="card h-100" style="border-left:4px solid #2E86C1">
+        <div class="card h-100" style="border-left:4px solid #27AE60">
             <div class="card-body">
                 <div class="text-muted mb-1" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.05em">Rencana Pensiun</div>
-                <div class="fw-bold" style="color:#1B4F72;font-size:.95rem">
+                <div class="fw-bold" style="color:#1A5632;font-size:.95rem">
                     {{ $application->pension_date?->translatedFormat('d F Y') ?? '-' }}
                 </div>
             </div>
@@ -122,7 +122,7 @@
                             <div class="d-flex flex-column align-items-center" style="width:32px;flex-shrink:0">
                                 <div class="rounded-circle d-flex align-items-center justify-content-center"
                                      style="width:32px;height:32px;flex-shrink:0;
-                                            background:{{ $isDone ? '#1E8449' : ($isCurrent ? '#2E86C1' : '#e9ecef') }};
+                                            background:{{ $isDone ? '#1E8449' : ($isCurrent ? '#27AE60' : '#e9ecef') }};
                                             color:{{ ($isDone || $isCurrent) ? '#fff' : '#adb5bd' }};font-size:.8rem">
                                     @if($isDone) <i class="bi bi-check-lg"></i>
                                     @elseif($isCurrent) <i class="bi bi-arrow-right-circle-fill"></i>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="pb-3" style="padding-top:5px">
                                 <div class="fw-semibold" style="font-size:.875rem;
-                                    color:{{ $isCurrent ? '#1B4F72' : ($isDone ? '#1E8449' : '#adb5bd') }}">
+                                    color:{{ $isCurrent ? '#1A5632' : ($isDone ? '#1E8449' : '#adb5bd') }}">
                                     {{ $status->label() }}
                                     @if($isCurrent) <span class="badge bg-primary ms-1" style="font-size:.7rem">Sekarang</span> @endif
                                 </div>
@@ -193,11 +193,11 @@
                     $pct        = $total > 0 ? round($uploaded / $total * 100) : 0;
                 @endphp
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span style="font-size:.875rem;font-weight:600;color:#1B4F72">{{ $uploaded }}/{{ $total }} berkas diunggah</span>
+                    <span style="font-size:.875rem;font-weight:600;color:#1A5632">{{ $uploaded }}/{{ $total }} berkas diunggah</span>
                     <span class="fw-bold" style="color:{{ $pct == 100 ? '#1E8449' : '#D4AC0D' }}">{{ $pct }}%</span>
                 </div>
                 <div class="progress mb-3" style="height:8px;border-radius:99px">
-                    <div class="progress-bar" style="width:{{ $pct }}%;background:{{ $pct == 100 ? '#1E8449' : '#2E86C1' }};border-radius:99px"></div>
+                    <div class="progress-bar" style="width:{{ $pct }}%;background:{{ $pct == 100 ? '#1E8449' : '#27AE60' }};border-radius:99px"></div>
                 </div>
                 <div class="d-flex flex-column gap-2">
                     @forelse($templates as $template)
@@ -260,10 +260,10 @@
                    onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
                     <div class="rounded d-flex align-items-center justify-content-center flex-shrink-0"
                          style="width:42px;height:42px;background:#eef4fb">
-                        <i class="bi bi-file-earmark-text" style="color:#2E86C1;font-size:1.1rem"></i>
+                        <i class="bi bi-file-earmark-text" style="color:#27AE60;font-size:1.1rem"></i>
                     </div>
                     <div style="min-width:0">
-                        <div class="fw-semibold text-truncate" style="font-size:.875rem;color:#1B4F72">{{ $article->title }}</div>
+                        <div class="fw-semibold text-truncate" style="font-size:.875rem;color:#1A5632">{{ $article->title }}</div>
                         <div class="text-muted" style="font-size:.78rem">{{ $article->created_at->translatedFormat('d M Y') }}</div>
                     </div>
                 </a>
@@ -297,7 +297,7 @@
                         <i class="bi bi-journal-text" style="color:#1E8449;font-size:1.1rem"></i>
                     </div>
                     <div style="min-width:0">
-                        <div class="fw-semibold text-truncate" style="font-size:.875rem;color:#1B4F72">{{ $regulation->title }}</div>
+                        <div class="fw-semibold text-truncate" style="font-size:.875rem;color:#1A5632">{{ $regulation->title }}</div>
                         <div class="text-muted" style="font-size:.78rem">{{ $regulation->created_at->translatedFormat('d M Y') }}</div>
                     </div>
                 </a>

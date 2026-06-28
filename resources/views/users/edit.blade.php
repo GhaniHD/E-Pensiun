@@ -31,7 +31,7 @@
                     <div class="d-flex gap-2 flex-wrap mt-1">
                         @php
                             $roleColor = match($user->role->value) {
-                                'sdm_kanwil' => '#1B4F72',
+                                'sdm_kanwil' => '#1A5632',
                                 'sdm_kantor' => '#1A5276',
                                 'tik'        => '#6C3483',
                                 'pensiunan'  => '#1E8449',
