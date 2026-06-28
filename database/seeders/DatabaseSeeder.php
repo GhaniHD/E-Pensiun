@@ -25,23 +25,23 @@ class DatabaseSeeder extends Seeder
     {
         // TIK (Kepala)
         User::create([
-            'name'      => 'Kepala TIK',
-            'nip'       => '198001012005011001',
-            'email'     => 'tik@pensiun.go.id',
-            'password'  => Hash::make('password'),
-            'role'      => UserRole::TIK,
-            'office'    => 'Kanwil',
+            'name' => 'Kepala TIK',
+            'nip' => '198001012005011001',
+            'email' => 'tik@pensiun.go.id',
+            'password' => Hash::make('password'),
+            'role' => UserRole::TIK,
+            'office' => 'Kanwil',
             'is_active' => true,
         ]);
 
         // SDM Kanwil
         User::create([
-            'name'      => 'Staff SDM Kanwil',
-            'nip'       => '198501012010011001',
-            'email'     => 'sdm.kanwil@pensiun.go.id',
-            'password'  => Hash::make('password'),
-            'role'      => UserRole::SDM_KANWIL,
-            'office'    => 'Kanwil',
+            'name' => 'Staff SDM Kanwil',
+            'nip' => '198501012010011001',
+            'email' => 'sdm.kanwil@pensiun.go.id',
+            'password' => Hash::make('password'),
+            'role' => UserRole::SDM_KANWIL,
+            'office' => 'Kanwil',
             'is_active' => true,
         ]);
 
@@ -57,34 +57,34 @@ class DatabaseSeeder extends Seeder
 
         foreach ($offices as $i => $office) {
             User::create([
-                'name'      => "Staff SDM {$office}",
-                'nip'       => '19900101' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
-                'email'     => 'sdm.kantor' . ($i + 1) . '@pensiun.go.id',
-                'password'  => Hash::make('password'),
-                'role'      => UserRole::SDM_KANTOR,
-                'office'    => $office,
+                'name' => $office,
+                'nip' => '19900101' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
+                'email' => 'sdm.kantor' . ($i + 1) . '@pensiun.go.id',
+                'password' => Hash::make('password'),
+                'role' => UserRole::SDM_KANTOR,
+                'office' => $office,
                 'is_active' => true,
             ]);
         }
 
         // Sample calon pensiunan
         User::create([
-            'name'      => 'Budi Santoso',
-            'nip'       => '196501012000011001',
-            'email'     => 'budi@pensiun.go.id',
-            'password'  => Hash::make('password'),
-            'role'      => UserRole::PENSIUNAN,
-            'office'    => 'KPKNL Bandung',
+            'name' => 'Budi Santoso',
+            'nip' => '196501012000011001',
+            'email' => 'budi@pensiun.go.id',
+            'password' => Hash::make('password'),
+            'role' => UserRole::PENSIUNAN,
+            'office' => 'KPKNL Bandung',
             'is_active' => true,
         ]);
 
         User::create([
-            'name'      => 'Siti Rahayu',
-            'nip'       => '196601022000012001',
-            'email'     => 'siti@pensiun.go.id',
-            'password'  => Hash::make('password'),
-            'role'      => UserRole::PENSIUNAN,
-            'office'    => 'KPKNL Bekasi',
+            'name' => 'Siti Rahayu',
+            'nip' => '196601022000012001',
+            'email' => 'siti@pensiun.go.id',
+            'password' => Hash::make('password'),
+            'role' => UserRole::PENSIUNAN,
+            'office' => 'KPKNL Bekasi',
             'is_active' => true,
         ]);
     }
@@ -93,10 +93,10 @@ class DatabaseSeeder extends Seeder
     {
         $types = [
             [
-                'name'        => 'Pensiun Batas Usia',
-                'slug'        => 'pensiun-batas-usia',
+                'name' => 'Pensiun Batas Usia',
+                'slug' => 'pensiun-batas-usia',
                 'description' => 'Pensiun yang diberikan kepada pegawai yang telah mencapai batas usia pensiun sesuai ketentuan yang berlaku.',
-                'icon'        => 'bi-person-badge',
+                'icon' => 'bi-person-badge',
                 'requirements' => [
                     'Fotokopi SK CPNS',
                     'Fotokopi SK PNS',
@@ -121,10 +121,10 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name'        => 'Pensiun Janda/Duda',
-                'slug'        => 'pensiun-janda-duda',
+                'name' => 'Pensiun Janda/Duda',
+                'slug' => 'pensiun-janda-duda',
                 'description' => 'Pensiun yang diberikan kepada janda atau duda dari pegawai yang meninggal dunia saat masih aktif bertugas.',
-                'icon'        => 'bi-heart',
+                'icon' => 'bi-heart',
                 'requirements' => [
                     'Surat Kematian dari Rumah Sakit/Kelurahan',
                     'Fotokopi KTP Janda/Duda',
@@ -149,10 +149,10 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name'        => 'Pensiun Wafat',
-                'slug'        => 'pensiun-wafat',
+                'name' => 'Pensiun Wafat',
+                'slug' => 'pensiun-wafat',
                 'description' => 'Pensiun yang diberikan kepada ahli waris pegawai yang meninggal dunia saat masih aktif dalam masa persiapan pensiun.',
-                'icon'        => 'bi-file-earmark-medical',
+                'icon' => 'bi-file-earmark-medical',
                 'requirements' => [
                     'Surat Kematian Resmi',
                     'Visum et Repertum (jika kecelakaan)',
@@ -177,10 +177,10 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name'        => 'Pensiun Dini',
-                'slug'        => 'pensiun-dini',
+                'name' => 'Pensiun Dini',
+                'slug' => 'pensiun-dini',
                 'description' => 'Pensiun yang diberikan kepada pegawai yang mengajukan pensiun sebelum mencapai batas usia pensiun atas permintaan sendiri.',
-                'icon'        => 'bi-door-open',
+                'icon' => 'bi-door-open',
                 'requirements' => [
                     'Surat Permohonan Pensiun Dini',
                     'Surat Rekomendasi dari Atasan Langsung',
@@ -205,10 +205,10 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name'        => 'Pensiun Cacat',
-                'slug'        => 'pensiun-cacat',
+                'name' => 'Pensiun Cacat',
+                'slug' => 'pensiun-cacat',
                 'description' => 'Pensiun yang diberikan kepada pegawai yang mengalami cacat akibat kedinasan sehingga tidak dapat menjalankan tugasnya lagi.',
-                'icon'        => 'bi-hospital',
+                'icon' => 'bi-hospital',
                 'requirements' => [
                     'Surat Keterangan Cacat dari Dokter Spesialis',
                     'Berita Acara Kejadian (jika cacat akibat kecelakaan dinas)',
@@ -233,10 +233,10 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name'        => 'Pensiun Pemberhentian',
-                'slug'        => 'pensiun-pemberhentian',
+                'name' => 'Pensiun Pemberhentian',
+                'slug' => 'pensiun-pemberhentian',
                 'description' => 'Pensiun yang diberikan kepada pegawai yang diberhentikan dengan hormat atas dasar penyederhanaan organisasi atau pertimbangan kepentingan dinas.',
-                'icon'        => 'bi-briefcase',
+                'icon' => 'bi-briefcase',
                 'requirements' => [
                     'SK Pemberhentian dari Pejabat Berwenang',
                     'Surat Keterangan Penyederhanaan Organisasi',
@@ -269,17 +269,17 @@ class DatabaseSeeder extends Seeder
             $pensionType = PensionType::create([
                 ...$type,
                 'requirements' => $requirements,
-                'is_active'    => true,
+                'is_active' => true,
             ]);
 
             // Buat document templates
             foreach ($requirements as $i => $req) {
                 DocumentTemplate::create([
                     'pension_type_id' => $pensionType->id,
-                    'document_name'   => $req,
-                    'description'     => 'Upload berkas ' . $req . ' yang telah dilegalisir.',
-                    'is_required'     => true,
-                    'sort_order'      => $i + 1,
+                    'document_name' => $req,
+                    'description' => 'Upload berkas ' . $req . ' yang telah dilegalisir.',
+                    'is_required' => true,
+                    'sort_order' => $i + 1,
                 ]);
             }
         }
@@ -289,25 +289,25 @@ class DatabaseSeeder extends Seeder
     {
         $regulations = [
             [
-                'title'       => 'Undang-Undang Nomor 11 Tahun 1969 tentang Pensiun Pegawai dan Pensiun Janda/Duda Pegawai',
-                'number'      => 'UU No. 11 Tahun 1969',
+                'title' => 'Undang-Undang Nomor 11 Tahun 1969 tentang Pensiun Pegawai dan Pensiun Janda/Duda Pegawai',
+                'number' => 'UU No. 11 Tahun 1969',
                 'description' => 'Mengatur tentang hak pensiun bagi pegawai negeri sipil dan keluarganya.',
-                'category'    => 'uu',
-                'year'        => 1969,
+                'category' => 'uu',
+                'year' => 1969,
             ],
             [
-                'title'       => 'Peraturan Pemerintah Nomor 11 Tahun 2017 tentang Manajemen Pegawai Negeri Sipil',
-                'number'      => 'PP No. 11 Tahun 2017',
+                'title' => 'Peraturan Pemerintah Nomor 11 Tahun 2017 tentang Manajemen Pegawai Negeri Sipil',
+                'number' => 'PP No. 11 Tahun 2017',
                 'description' => 'Mengatur manajemen PNS termasuk ketentuan pensiun batas usia.',
-                'category'    => 'pp',
-                'year'        => 2017,
+                'category' => 'pp',
+                'year' => 2017,
             ],
             [
-                'title'       => 'Peraturan Pemerintah Nomor 45 Tahun 2015 tentang Penyelenggaraan Program Jaminan Pensiun',
-                'number'      => 'PP No. 45 Tahun 2015',
+                'title' => 'Peraturan Pemerintah Nomor 45 Tahun 2015 tentang Penyelenggaraan Program Jaminan Pensiun',
+                'number' => 'PP No. 45 Tahun 2015',
                 'description' => 'Mengatur penyelenggaraan program jaminan pensiun bagi pekerja.',
-                'category'    => 'pp',
-                'year'        => 2015,
+                'category' => 'pp',
+                'year' => 2015,
             ],
         ];
 
@@ -322,23 +322,23 @@ class DatabaseSeeder extends Seeder
 
         $articles = [
             [
-                'title'     => 'Workshop Kewirausahaan Budidaya Tanaman untuk Persiapan Pensiun',
-                'category'  => 'kewirausahaan',
-                'content'   => '<p>Program Masa Persiapan Pensiun (MPP) hadir dengan berbagai kegiatan yang membantu pegawai mempersiapkan diri memasuki masa pensiun. Salah satunya adalah workshop kewirausahaan budidaya tanaman yang sangat diminati.</p><p>Workshop ini mengajarkan teknik budidaya sayuran organik, tanaman hias, hingga tanaman obat yang memiliki nilai ekonomis tinggi. Peserta akan mendapatkan pengetahuan praktis tentang cara memulai usaha pertanian skala rumahan.</p>',
-                'excerpt'   => 'Program MPP menghadirkan workshop kewirausahaan budidaya tanaman untuk membantu persiapan masa pensiun.',
+                'title' => 'Workshop Kewirausahaan Budidaya Tanaman untuk Persiapan Pensiun',
+                'category' => 'kewirausahaan',
+                'content' => '<p>Program Masa Persiapan Pensiun (MPP) hadir dengan berbagai kegiatan yang membantu pegawai mempersiapkan diri memasuki masa pensiun. Salah satunya adalah workshop kewirausahaan budidaya tanaman yang sangat diminati.</p><p>Workshop ini mengajarkan teknik budidaya sayuran organik, tanaman hias, hingga tanaman obat yang memiliki nilai ekonomis tinggi. Peserta akan mendapatkan pengetahuan praktis tentang cara memulai usaha pertanian skala rumahan.</p>',
+                'excerpt' => 'Program MPP menghadirkan workshop kewirausahaan budidaya tanaman untuk membantu persiapan masa pensiun.',
             ],
             [
-                'title'     => 'Tips Mengelola Keuangan di Masa Pensiun',
-                'category'  => 'keuangan',
-                'content'   => '<p>Memasuki masa pensiun memerlukan perencanaan keuangan yang matang. Berikut beberapa tips mengelola keuangan agar tetap sejahtera di masa pensiun.</p><p>Pertama, buatlah anggaran bulanan yang realistis berdasarkan uang pensiun yang akan diterima. Kedua, diversifikasi sumber penghasilan dengan investasi yang tepat.</p>',
-                'excerpt'   => 'Panduan praktis mengelola keuangan agar tetap sejahtera selama masa pensiun.',
+                'title' => 'Tips Mengelola Keuangan di Masa Pensiun',
+                'category' => 'keuangan',
+                'content' => '<p>Memasuki masa pensiun memerlukan perencanaan keuangan yang matang. Berikut beberapa tips mengelola keuangan agar tetap sejahtera di masa pensiun.</p><p>Pertama, buatlah anggaran bulanan yang realistis berdasarkan uang pensiun yang akan diterima. Kedua, diversifikasi sumber penghasilan dengan investasi yang tepat.</p>',
+                'excerpt' => 'Panduan praktis mengelola keuangan agar tetap sejahtera selama masa pensiun.',
             ],
         ];
 
         foreach ($articles as $article) {
             Article::create([
                 ...$article,
-                'author_id'    => $tik?->id ?? 1,
+                'author_id' => $tik?->id ?? 1,
                 'is_published' => true,
                 'published_at' => now(),
             ]);
