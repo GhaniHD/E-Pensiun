@@ -54,8 +54,8 @@
         }
 
        .login-left .brand-logo {
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 200px;
     background: rgba(255,255,255,0.15);
     border-radius: 50%;
     display: flex;
