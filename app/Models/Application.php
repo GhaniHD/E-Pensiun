@@ -22,6 +22,30 @@ class Application extends Model
         'sk_number',
         'sk_issued_at',
         'notes',
+
+        // ── Data Calon Pensiunan ───────────────────────────────────
+        'nama_calon_pensiunan',
+        'unit_kerja',
+        'nip_calon_pensiunan',
+        'tanggal_lahir',
+        'jenis_pensiun_bkn',
+        'kenaikan_pangkat',
+
+        // ── Input Kalkulator Masa Kerja ────────────────────────────
+        'usia_pensiun',
+        'tmt_cpns',
+        'tmt_pns',
+        'tmt_pangkat_terakhir',
+        'mk_kp_terakhir_tahun',
+        'mk_kp_terakhir_bulan',
+
+        // ── Hasil Kalkulator (disimpan) ────────────────────────────
+        'mk_pensiun_tahun',
+        'mk_pensiun_bulan',
+        'mk_pns_tahun',
+        'mk_pns_bulan',
+        'mk_golongan_tahun',
+        'mk_golongan_bulan',
     ];
 
     protected function casts(): array
@@ -30,6 +54,11 @@ class Application extends Model
             'status' => ApplicationStatus::class,
             'pension_date' => 'date',
             'sk_issued_at' => 'datetime',
+            'tanggal_lahir' => 'date',
+            'tmt_cpns' => 'date',
+            'tmt_pns' => 'date',
+            'tmt_pangkat_terakhir' => 'date',
+            'kenaikan_pangkat' => 'boolean',
         ];
     }
 
@@ -122,7 +151,6 @@ class Application extends Model
         return true;
     }
 
-
     public function rejectApplication(User $actor, string $note): bool
     {
         $oldStatus = $this->status;
@@ -140,7 +168,6 @@ class Application extends Model
         return true;
     }
 
-    /** Kembalikan ke tahap Upload untuk perbaikan berkas */
     public function returnToUpload(User $actor, string $note): bool
     {
         $oldStatus = $this->status;
@@ -165,13 +192,11 @@ class Application extends Model
         return (int) round(($current / $total) * 100);
     }
 
-
     public function isCancelled(): bool
     {
         return $this->status === ApplicationStatus::DIBATALKAN;
     }
 
-    /** Status yang masih boleh dibatalkan oleh sdm_kantor */
     public function canBeCancelled(): bool
     {
         return in_array($this->status, [
@@ -197,9 +222,9 @@ class Application extends Model
 
         return true;
     }
+
     // ── Checklist helpers ──────────────────────────────────
 
-    /** Apakah semua dokumen sudah dicek oleh KPKNL */
     public function allDocumentsCheckedByKantor(): bool
     {
         if ($this->documents->isEmpty())
@@ -207,7 +232,6 @@ class Application extends Model
         return $this->documents->every(fn($d) => !is_null($d->kantor_check_status));
     }
 
-    /** Berapa dokumen bermasalah saat dicek KPKNL */
     public function problematicDocumentsCount(): int
     {
         return $this->documents->filter(
@@ -215,11 +239,34 @@ class Application extends Model
         )->count();
     }
 
-    /** Apakah semua dokumen sudah dicek "Sesuai" oleh Kanwil */
     public function allDocumentsApprovedByKanwil(): bool
     {
         if ($this->documents->isEmpty())
             return false;
         return $this->documents->every(fn($d) => $d->kanwil_status === 'sesuai');
+    }
+
+    // ── Masa Kerja Helpers ─────────────────────────────────
+
+    /** Label masa kerja golongan untuk tampilan (misal "32 th 2 bln") */
+    public function getMkGolonganLabelAttribute(): ?string
+    {
+        if (is_null($this->mk_golongan_tahun))
+            return null;
+        return $this->mk_golongan_tahun . ' th ' . $this->mk_golongan_bulan . ' bln';
+    }
+
+    public function getMkPensiunLabelAttribute(): ?string
+    {
+        if (is_null($this->mk_pensiun_tahun))
+            return null;
+        return $this->mk_pensiun_tahun . ' th ' . $this->mk_pensiun_bulan . ' bln';
+    }
+
+    public function getMkPnsLabelAttribute(): ?string
+    {
+        if (is_null($this->mk_pns_tahun))
+            return null;
+        return $this->mk_pns_tahun . ' th ' . $this->mk_pns_bulan . ' bln';
     }
 }
