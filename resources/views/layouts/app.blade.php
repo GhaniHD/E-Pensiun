@@ -28,8 +28,8 @@
     text-align: center;
 }
 #sidebar .sidebar-logo {
-    width: 100px;
-    height: 120px;
+    width: 180px;
+    height: 220px;
     object-fit: contain;
     margin-bottom: 12px;
 }
