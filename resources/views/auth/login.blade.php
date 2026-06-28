@@ -53,17 +53,25 @@
             bottom: -80px; left: -80px;
         }
 
-        .login-left .brand-logo {
-            width: 80px; height: 80px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
+       .login-left .brand-logo {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+}
+
+.login-left .brand-logo .logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
         .login-left .brand-logo i {
             font-size: 2.5rem;
@@ -225,9 +233,9 @@
 
     {{-- Left Panel --}}
     <div class="login-left">
-        <div class="brand-logo">
-            <i class="bi bi-award-fill"></i>
-        </div>
+       <div class="brand-logo">
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
+</div>
         <h2>Sistem Informasi<br>Pengajuan Pensiun</h2>
         <p class="instansi">Badan Kepegawaian Negara<br>Instansi Pemerintah</p>
 

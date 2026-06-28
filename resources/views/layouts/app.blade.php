@@ -18,9 +18,35 @@
         }
         body { background:#f0f4f8; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif; min-height:100vh; }
         #sidebar { width:var(--sidebar-w); min-height:100vh; background:var(--primary); display:flex; flex-direction:column; flex-shrink:0; position:fixed; top:0; left:0; height:100vh; overflow-y:auto; z-index:1040; transition:transform 0.3s ease; }
-        #sidebar .sidebar-brand { padding:1.5rem 1.25rem 1rem; border-bottom:1px solid rgba(255,255,255,0.12); }
-        #sidebar .sidebar-brand h6 { color:rgba(255,255,255,0.6); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.35rem; }
-        #sidebar .sidebar-brand .brand-name { color:#fff; font-weight:700; font-size:0.95rem; line-height:1.3; }
+       #sidebar .sidebar-brand {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+
+    display: flex;
+    flex-direction: column;   /* logo di atas */
+    align-items: center;      /* rata tengah */
+    text-align: center;
+}
+#sidebar .sidebar-logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+       #sidebar .sidebar-brand h6 {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
+
+#sidebar .sidebar-brand .brand-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
         #sidebar .user-info { padding:1rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.15); }
         #sidebar .user-info .user-name { color:#fff; font-weight:600; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         #sidebar .user-info .user-role-badge { font-size:0.7rem; padding:0.2rem 0.55rem; border-radius:999px; background:rgba(255,255,255,0.18); color:#fff; display:inline-block; margin-top:0.3rem; }
@@ -69,13 +95,18 @@
     <nav id="sidebar">
 
         {{-- Brand --}}
-        <div class="sidebar-brand">
-            <h6>Instansi Pemerintah</h6>
-            <div class="brand-name">
-                <i class="bi bi-award-fill me-1" style="color:#F9E79F"></i>
-                Sistem Informasi<br>Pengajuan Pensiun
-            </div>
-        </div>
+  <div class="sidebar-brand text-center">
+    <img src="{{ asset('images/logo.png') }}"
+         alt="Logo"
+         style="width:70px; height:70px; object-fit:contain; margin-bottom:10px;">
+
+    <h6>Instansi Pemerintah</h6>
+
+    <div class="brand-name">
+        Sistem Informasi<br>
+        Pengajuan Pensiun
+    </div>
+</div>
 
         {{-- User Info --}}
         <div class="user-info">
