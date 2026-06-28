@@ -56,10 +56,13 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($offices as $i => $office) {
+            // "KPKNL Bandung" → "kpknl.bandung"
+            $emailSlug = strtolower(str_replace(' ', '.', $office));
+
             User::create([
                 'name' => $office,
                 'nip' => '19900101' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
-                'email' => 'sdm.kantor' . ($i + 1) . '@pensiun.go.id',
+                'email' => $emailSlug . '@pensiun.go.id',
                 'password' => Hash::make('password'),
                 'role' => UserRole::SDM_KANTOR,
                 'office' => $office,
