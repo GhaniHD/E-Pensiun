@@ -14,11 +14,33 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_PROCESS_TIMEOUT=600
+
 WORKDIR /var/www
 
+# ✅ Copy composer files DULU (biar layer cache-nya efisien)
+COPY composer.json composer.lock ./
+
+# ✅ Install dengan fallback ke --prefer-source kalau dist gagal
+RUN composer install \
+    --no-dev \
+    --no-autoloader \
+    --no-scripts \
+    --no-interaction \
+    --prefer-dist \
+    || composer install \
+    --no-dev \
+    --no-autoloader \
+    --no-scripts \
+    --no-interaction \
+    --prefer-source
+
+# ✅ Baru copy sisa file project
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+# ✅ Generate autoloader setelah semua file ada
+RUN composer dump-autoload --optimize --no-dev
 
 RUN chmod -R 775 storage bootstrap/cache
 
